@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ListTest {
-private static final int N_NUMBERS_PERFORMANCE = 1_000_0000;
+private static final int N_NUMBERS_PERFORMANCE = 1_000_00;
 private List<Integer> numbers;
 private List<String> strings;
 Integer initialNumbers[] = {10, 20, 40};
@@ -39,6 +39,7 @@ String initialStrings[] = {"name1", "name2"};
 		}
 		return res;
 	}
+	
 	@Test
 	void sortedSearchExist() {
 		assertEquals(0, numbers.sortedSearch(10));
@@ -259,6 +260,7 @@ String initialStrings[] = {"name1", "name2"};
 		numbers.sort(new ProximityNumberComparator(23));
 		assertArrayEquals(expectedProximity23, getArrayFromList(numbers));
 	}
+	// L10
 	@Test
 	void removeIfPerformanceTest() {
 		//List<Integer> list = new LinkedList<>();
@@ -276,5 +278,33 @@ String initialStrings[] = {"name1", "name2"};
 		}
 		
 	}
-
+	@Test
+	void sortedSearchTest() {
+		assertEquals(0, numbers.sortedSearch((Integer)10, Comparator.naturalOrder()));
+		assertEquals(2, numbers.sortedSearch((Integer)40, Comparator.naturalOrder()));
+		assertEquals(-3, numbers.sortedSearch((Integer)35, Comparator.naturalOrder()));
+		assertEquals(0, strings.sortedSearch("name1", Comparator.naturalOrder()));
+		assertEquals(1, strings.sortedSearch("name2", Comparator.naturalOrder()));
+		assertEquals(-3, strings.sortedSearch("name3", Comparator.naturalOrder()));
+	}
+	@Test
+	void clearTest() {
+		numbers.clear();
+		assertEquals(0, numbers.size());
+		Integer expectedInts[] = new Integer[0];
+		assertArrayEquals(expectedInts, getArrayFromList(numbers));
+		strings.clear();
+		assertEquals(0, strings.size());
+		String expectedStrs[] = new String[0];
+		assertArrayEquals(expectedStrs, getArrayFromList(strings));
+	}
+	@Test
+	void sortedSearchPerformanceTest() {
+		List<Integer> list = new LinkedList<>();
+		//List<Integer> list = new ArrayList<>();
+		fillListPerformance(list);
+		list.sort(Comparator.naturalOrder());
+		Integer pattern = list.get(N_NUMBERS_PERFORMANCE/2);
+		assertEquals(N_NUMBERS_PERFORMANCE/2, list.sortedSearch(pattern, Comparator.naturalOrder()));
+	}
 }
